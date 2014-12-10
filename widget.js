@@ -46,6 +46,7 @@ define([
 		"sig/initialize": function () {
 			var me = this;
 			var cued = false;
+			is_playing = false;
 
 			EVENTS.forEach(function (event) {
 				me.on(event, function () {
@@ -77,9 +78,19 @@ define([
 
 				$position.call($element, position_cue, duration_cue);
 
+				// Trigger 'is/playing' event:
+				// when the audio position is after cue point (whether it is 0 or a defined cue point) and starts, trigger 'is/playing' event
+				if(!is_playing && position > cue_in)
+				{
+					is_playing = true;
+					me.publish('audio5js/is/playing');
+				}
+
 				if (cued === true) {
 					return;
 				}
+				// Start playing audio from a cue point:
+				// Play from 0 second and pause instantly then move to cue point and start playing again
 				else if (position !== 0 && position < cue_in) {
 					cued = true;
 					return me
@@ -92,8 +103,11 @@ define([
 						})
 						.ensure(function () {
 							cued = false;
+							is_playing = false;
 						});
 				}
+				// Stop playing audio at a cue point:
+				// Let the audio play until the duration goes over cue point then pause and set duration to match exactly cue point then call ended event
 				else if (position !== duration && position > cue_out) {
 					cued = true;
 					return me
@@ -106,8 +120,11 @@ define([
 						})
 						.ensure(function () {
 							cued = false;
+							is_playing = false;
 						});
 				}
+				// Trigger Pause event at then end of audio play:
+				// Once the audio play get to the end, explicitely trigger the pause event as it does not get triggered otherwise on IE.
 				else if (position == duration)
 				{
 					return me.emit("audio5js/do/pause");
