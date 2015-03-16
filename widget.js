@@ -19,7 +19,8 @@ define([
 		"audio5js/play",
 		"audio5js/pause",
 		"audio5js/seeked",
-		"audio5js/ended"
+		"audio5js/ended",
+		"audio5js/buffering"
 	];
 	var METHODS = [
 		"audio5js/do/play",
