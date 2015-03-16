@@ -96,7 +96,7 @@ define([
 							cued = false;
 						});
 				}
-				else if ( position !== duration && position > cue_out || duration - position <= 0.2) {
+				else if (position > cue_out || duration - position <= 1) {
 					cued = true;
 					return me
 						.emit("audio5js/do/pause")
