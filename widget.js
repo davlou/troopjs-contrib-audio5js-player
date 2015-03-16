@@ -1,3 +1,4 @@
+
 define([
 	"troopjs-contrib-audio5js/widget",
 	"jquery",
@@ -95,21 +96,7 @@ define([
 							cued = false;
 						});
 				}
-				else if (position !== duration && position > cue_out) {
-					cued = true;
-					return me
-						.emit("audio5js/do/pause")
-						.tap(function () {
-							return me.emit("audio5js/do/seek", cue_out);
-						})
-						.tap(function () {
-							return me.emit("audio5js/ended");
-						})
-						.ensure(function () {
-							cued = false;
-						});
-				}
-				else if (duration - position <= 0.2) {
+				else if ( position !== duration && position > cue_out || duration - position <= 0.2) {
 					cued = true;
 					return me
 						.emit("audio5js/do/pause")
