@@ -116,51 +116,37 @@ define([
 
 				$position.call($element, position_cue, duration_cue);
 
-				if (cued === true) {
-					return;
-				}
-				else if (position !== 0 && position < cue_in) {
-					cued = true;
-					return me
-						.emit("audio5js/do/pause")
-						.tap(function () {
-							return me.emit("audio5js/do/seek", cue_in);
-						})
-						.tap(function () {
-							return me.emit("audio5js/do/play");
-						})
-						.ensure(function () {
-							cued = false;
-						});
-				}
-				else if (position !== duration && position > cue_out) {
-					cued = true;
-					return me
-						.emit("audio5js/do/pause")
-						.tap(function () {
-							return me.emit("audio5js/do/seek", cue_out);
-						})
-						.tap(function () {
-							return me.emit("audio5js/ended");
-						})
-						.ensure(function () {
-							cued = false;
-						});
-				}
-				else if (duration - position <= 0.2) {
-					cued = true;
-					return me
-						.emit("audio5js/do/pause")
-						.tap(function () {
-							return me.emit("audio5js/do/seek", cue_in);
-						})
-						.tap(function () {
-							return me.emit("audio5js/ended");
-						})
-						.ensure(function () {
-							cued = false;
-						});
-				}
+                if (cued === true) {
+                    return;
+                }
+                else if (position !== 0 && position < cue_in) {
+                    cued = true;
+                    return me
+                        .emit("audio5js/do/pause")
+                        .tap(function () {
+                            return me.emit("audio5js/do/seek", cue_in);
+                        })
+                        .tap(function () {
+                            return me.emit("audio5js/do/play");
+                        })
+                        .ensure(function () {
+                            cued = false;
+                        });
+                }
+                else if (position > cue_out || duration - position <= 1) {
+                    cued = true;
+                    return me
+                        .emit("audio5js/do/pause")
+                        .tap(function () {
+                            return me.emit("audio5js/do/seek", cue_in);
+                        })
+                        .tap(function () {
+                            return me.emit("audio5js/ended");
+                        })
+                        .ensure(function () {
+                            cued = false;
+                        });
+                }
 			});
 
 			me.on('audio5js/pause', cancelLaggingCheck);
