@@ -17,7 +17,7 @@
     "jquery": ">=1.8",
     "requirejs-text": "~2.0.12",
     "moment": "~2.8",
-    "troopjs-contrib-audio5js": "~1"
+    "troopjs-contrib-audio5js": "davlou/troopjs-contrib-audio5js#develop"
   },
   "resolutions": {
     "when": "~3.4",
